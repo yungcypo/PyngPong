@@ -345,12 +345,15 @@ def M_collide():
     
     if M_B.rect.right < 0:
         M_P2.score += 1
+        M_S2.update(M_P2.score)
         M_reset()
     if M_B.rect.left > W:
         M_P1.score += 1
+        M_S1.update(M_P1.score)
         M_reset()
     
-    M_S1.update(M_P1.score)
+    
+    
 
 def M_press_key():
     M_B.rect.center = (W/2, H/2)
