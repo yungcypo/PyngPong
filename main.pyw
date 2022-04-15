@@ -51,6 +51,10 @@ if theme == "black":
     colors["foreground"] = colors["white"]
     colors["background"] = colors["gray"]
     colors["exitcolor"] = colors["red"]
+if theme == "white":
+    colors["foreground"] = colors["gray"]
+    colors["background"] = colors["white"]
+    colors["exitcolor"] = colors["red"]
 else:
     colors["foreground"] = colors["white"]
     colors["background"] = colors["gray"]
@@ -151,6 +155,7 @@ class Player:
     
     def draw(self):  
         self.move()
+        self.collision()
         SCREEN.blit(self.surf, self.rect)
 
     def move(self):
@@ -164,15 +169,13 @@ class Player:
                 self.rect.centerx += self.speed
             if self.moving2:
                 self.rect.centerx -= self.speed
-        
 
-
+    def collision(self):
         if self.direction == "vertical":
             if self.rect.top < self.w:
                 self.rect.top = self.w
             if self.rect.bottom > H - self.w:
                 self.rect.bottom = H - self.w
-            
         if self.direction == "horizontal":
             if self.rect.left < self.h:
                 self.rect.left = self.h
@@ -184,7 +187,7 @@ class Ball:
     def __init__(self, radius, speed):
         self.radius = radius
         self.speed = speed
-        self.rect = pygame.rect.Rect(0, 0, radius*2, radius*2)
+        self.rect = pygame.rect.Rect(0, 0, self.radius*2, self.radius*2)
         self.rect.center = (W/2, H/2)
         self.x = random.choice((True, False))
         self.y = random.choice((True, False))
@@ -239,29 +242,27 @@ MM_title = Text("PYNGPONG", 72, center = (W/2, H/24*7))
 MM_S = Button("Solo", 32, topright = (MM_title.rect.centerx - 20, MM_title.rect.bottom + 32))
 MM_D = Button("Duo", 32, topleft = (MM_title.rect.centerx + 20, MM_title.rect.bottom + 32))
 MM_Q = Button("  Quad  ", 32, midtop = ((MM_S.rect.left + MM_D.rect.right) / 2, MM_D.rect.bottom + 32))
-MM_settings = Button("Settings", 20, topright = (MM_Q.rect.centerx - 16, MM_Q.rect.bottom + 24))
-MM_E = Button("Exit", 20, topleft = (MM_Q.rect.centerx + 16, MM_Q.rect.bottom + 24))
-MM_I = Button("i", 20, topleft = (MM_E.rect.right + 22, MM_Q.rect.bottom + 24))
+MM_SM = Button("Settings", 20, topright = (MM_Q.rect.centerx - 16, MM_Q.rect.bottom + 24))
+MM_EM = Button("Exit", 20, topleft = (MM_Q.rect.centerx + 16, MM_Q.rect.bottom + 24))
+MM_I = Button("i", 20, topleft = (MM_EM.rect.right + 22, MM_Q.rect.bottom + 24))
 MM_info = Text("By Cypo :) ", 20, midbottom = (W/2, H - 10))
-
-MM_S.rect
 
 MM_info_trigger = False
 
-MM_E.outline_color = colors["exitcolor"]
+MM_EM.outline_color = colors["exitcolor"]
 
-MM_buttons = [MM_S, MM_D, MM_Q, MM_settings, MM_E, MM_I]
+MM_buttons = [MM_S, MM_D, MM_Q, MM_SM, MM_EM, MM_I]
 
 
 
 PM_title = Text("Paused", 72, center = (W/2, H/24*7))
 PM_C = Button("Continue", 32, midtop = (PM_title.rect.centerx, PM_title.rect.bottom + 32))
-PM_M = Button("Main Menu", 32, midtop = (PM_C.rect.centerx, PM_C.rect.bottom + 28))
-PM_S = Button("Settings", 20, topleft = (PM_M.rect.left + 16, PM_M.rect.bottom + 24))
-PM_E = Button("Exit", 20, topright = (PM_M.rect.right - 16, PM_M.rect.bottom + 24))
-PM_E.outline_color = colors["exitcolor"]
+PM_MM = Button("Main Menu", 32, midtop = (PM_C.rect.centerx, PM_C.rect.bottom + 28))
+PM_SM = Button("Settings", 20, topleft = (PM_MM.rect.left + 16, PM_MM.rect.bottom + 24))
+PM_EM = Button("Exit", 20, topright = (PM_MM.rect.right - 16, PM_MM.rect.bottom + 24))
+PM_EM.outline_color = colors["exitcolor"]
 
-PM_buttons = [PM_C, PM_M, PM_S, PM_E]
+PM_buttons = [PM_C, PM_MM, PM_SM, PM_EM]
 
 
 
@@ -291,6 +292,8 @@ D_U = Button("↑", 20, midbottom = (W/5*4, H/2 - 16))
 D_D = Button("↓", 20, midtop = (W/5*4, H/2 + 16))
 
 D_buttons = [D_W, D_S, D_U, D_D] 
+for i in D_buttons:
+    i.disabled = True
 
 D_PW, D_PH = 4, 100  # width, height
 D_PX, D_PY = 12, H/2  # X, Y
@@ -317,6 +320,8 @@ S_L = Button("←", 20, bottomright = (W/2 - 14, H/4*3 + 24))
 S_R = Button("→", 20, bottomleft = (W/2 + 14, H/4*3 + 24))
 
 S_buttons = [S_A, S_D, S_L, S_R]
+for i in S_buttons:
+    i.disabled = True
 
 S_PW, S_PH = 160, 4
 S_PX, S_PY = W/2, H - 12
@@ -411,8 +416,8 @@ def MM_draw():
     MM_S.draw()
     MM_D.draw()
     MM_Q.draw()
-    MM_settings.draw()
-    MM_E.draw()
+    MM_SM.draw()
+    MM_EM.draw()
     MM_I.draw()
     if MM_info_trigger:
         MM_info.draw()
@@ -421,9 +426,9 @@ def MM_draw():
 def PM_draw():
     PM_title.draw()
     PM_C.draw()
-    PM_M.draw()
-    PM_S.draw()
-    PM_E.draw()
+    PM_MM.draw()
+    PM_SM.draw()
+    PM_EM.draw()
 
 
 def EM_draw():
@@ -491,7 +496,6 @@ def D_press_key():
     D_B.rect.center = (W/2, H/2)
 
     for i in D_buttons:
-        i.disabled = True
         i.draw()
     
     pygame.draw.polygon(SCREEN, colors["background"], 
@@ -520,7 +524,6 @@ def S_press_key():
     S_B.rect.center = (W/2, H/2)
 
     for i in S_buttons:
-        i.disabled = True
         i.draw()
     
     pygame.draw.polygon(SCREEN, colors["background"],
@@ -657,8 +660,8 @@ def Q_draw():
 # ===== FUNCTIONS 2 ===== #
 
 def MAINMENU():
-    reset_score()
     global MM_info_trigger, allpress_key_var
+    reset_score()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -673,9 +676,9 @@ def MAINMENU():
                     DUO()
                 if MM_Q.hover:
                     QUAD()
-                if MM_settings.hover:
+                if MM_SM.hover:
                     SETTINGS()
-                if MM_E.hover:
+                if MM_EM.hover:
                     EXITMENU()
                 if MM_I.hover:
                     MM_info_trigger = not MM_info_trigger
@@ -686,6 +689,7 @@ def MAINMENU():
         update()
     
 def PAUSEMENU():
+    global allplayers
     for i in allplayers:
         i.moving1 = False
         i.moving2 = False
@@ -699,11 +703,11 @@ def PAUSEMENU():
             if event.type == pygame.MOUSEBUTTONUP:
                 if PM_C.hover:
                     return
-                if PM_M.hover:
+                if PM_MM.hover:
                     MAINMENU()
-                if PM_S.hover:
+                if PM_SM.hover:
                     SETTINGS()
-                if PM_E.hover:
+                if PM_EM.hover:
                     EXITMENU()
 
         SCREEN.fill(colors["background"])
