@@ -8,3 +8,5 @@ Basic Pong game made in Python
 3. After downloading extract *ZIP*  
 4. Open *main.exe* and play  
 > Please make sure to keep *assets* in the same directory as *main.exe*, otherwise the game won't work  
+
+Check out my [other projects](https://github.com/yungcypo?tab=repositories)
