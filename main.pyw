@@ -1038,16 +1038,15 @@ def QUAD():
 
 def SETTINGS():
     global game_stats, SM_theme_changes_bool
+    save_stats()
+    with open ("assets\JSON\stats.json", "r") as json_file:
+        game_stats = json.load(json_file)
     if game_settings["theme"] == "black":
         SM_theme_black.active = True
     if game_settings["theme"] == "yellow":
         SM_theme_yellow.active = True
     if game_settings["theme"] == "white":
         SM_theme_white.active = True
-    with open ("assets\JSON\settings.json", "w") as json_file:
-        json.dump(game_settings, json_file, indent=4)
-    with open ("assets\JSON\stats.json", "r") as json_file:
-        game_stats = json.load(json_file)
 
     while True:
         for event in pygame.event.get():
