@@ -884,6 +884,7 @@ def EXITMENU():
 def SOLO():
     global S_press_key_var
     global current_FPS, current_time
+    S_P1.rect.centerx = W/2
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -928,6 +929,8 @@ def SOLO():
 def DUO():
     global D_press_key_var
     global current_FPS, current_time
+    D_P1.rect.centery = H/2
+    D_P2.rect.centery = H/2
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -972,6 +975,10 @@ def DUO():
 def QUAD():
     global Q_press_key_var
     global current_FPS, current_time
+    Q_P1.rect.centery = H/2
+    Q_P2.rect.centerx = W/2
+    Q_P3.rect.centerx = W/2
+    Q_P4.rect.centery = H/2
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
