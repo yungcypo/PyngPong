@@ -406,13 +406,14 @@ SM_stats = Text("Stats", 32, topleft = (32, SM_theme_black.rect.bottom + 40))
 SM_stats_time_str = "Time spent playing: "
 SM_stats_time_str += str(datetime.timedelta(seconds = game_stats["time_spent"]))
 SM_stats_time = Text(SM_stats_time_str, 20, topleft = (48, SM_stats.rect.bottom + 8))
-SM_stats_distance_str = "Distance travelled by ball [px] : " + str(game_stats["distance"])
+SM_stats_distance_str = "Distance travelled by ball: " + str(game_stats["distance"]) + "px"
 SM_stats_distance = Text(SM_stats_distance_str, 20, topleft = (SM_stats_time.rect.left, SM_stats_time.rect.bottom + 8))
 SM_stats_score_str = "Goals scored: " + str(game_stats["total_score"])
 SM_stats_score = Text(SM_stats_score_str, 20, topleft = (SM_stats_distance.rect.left, SM_stats_distance.rect.bottom + 8))
 SM_credits = Text("Credits", 32, topleft = (24, SM_stats_score.rect.bottom + 40))
 SM_credits_developer = Text("Main developer: Cypo", 20, topleft = (48, SM_credits.rect.bottom + 8))
-SM_credits_sound = Text("Sounds: ", 20, topleft = (48, SM_credits_developer.rect.bottom + 8))
+SM_credits_icon = Text("Icon: www.flaticon.com", 20, topleft =(48, SM_credits_developer.rect.bottom + 8))
+SM_credits_sound = Text("Sounds: ", 20, topleft = (48, SM_credits_icon.rect.bottom + 8))
 SM_credits_sound1 = Text("www.storyblocks.com", 20, topleft = (SM_credits_sound.rect.right, SM_credits_sound.rect.top))
 SM_credits_sound2 = Text("www.monkeytype.com", 20, topleft = (SM_credits_sound.rect.right, SM_credits_sound1.rect.bottom + 8))
 SM_cancel = Button("Cancel", 20, bottomright = (W - 32, H - 32))
@@ -592,6 +593,7 @@ def SM_draw():
     pygame.draw.aaline(SCREEN, colors["foreground"], (24, SM_stats_score.rect.bottom + 24), (W- 24, SM_stats_score.rect.bottom + 24))
     SM_credits.draw()
     SM_credits_developer.draw()
+    SM_credits_icon.draw()
     SM_credits_sound.draw()
     SM_credits_sound1.draw()
     SM_credits_sound2.draw()
@@ -1051,11 +1053,9 @@ def SETTINGS():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                json_file.close
                 EXITMENU()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    json_file.close
                     EXITMENU()
             if event.type == pygame.MOUSEBUTTONUP:
                 if SM_sound.hover:
